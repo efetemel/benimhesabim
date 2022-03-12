@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: 5,
+                    itemCount: snapshot.data!.length >= 5  ? 5 : snapshot.data!.length,
                     itemBuilder: (context,index){
                       Map dataAtIndex = snapshot.data![index];
                       if(dataAtIndex['type'] == "Gider")
