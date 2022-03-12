@@ -109,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -138,6 +139,12 @@ class _HomeScreenState extends State<HomeScreen> {
               getTotalBalance(snapshot.data!);
               getExpensePlotPoints(snapshot.data!);
               getInComePlotPoints(snapshot.data!);
+              String balanceDotAfter = totalBalance.toDouble().toString().split('.').last;
+              String balanceDotBefore = totalBalance.toDouble().toString().split('.').first;
+              if(balanceDotAfter.isNotEmpty && balanceDotAfter.length >= 2){
+                balanceDotAfter = balanceDotAfter.substring(0,2);
+              }
+
               return ListView(
                 children: [
                   Padding(
@@ -184,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Text(
-                            Decimal.parse(totalBalance.toString()).toString() + " TL",
+                            balanceDotBefore+"."+balanceDotAfter + " TL",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 22.0,
@@ -272,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         vertical: 40.0
                     ),
                     margin: EdgeInsets.all(12.0),
-                    child: Text("Gösterilecek bir gider yok",
+                    child: Text("Gösterilecek bir gider verisi yok",
                     style: TextStyle(
                       fontSize: 20.0,
                     ),)
@@ -344,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 40.0
                       ),
                       margin: EdgeInsets.all(12.0),
-                      child: Text("Gösterilecek bir gelir yok",
+                      child: Text("Gösterilecek bir gelir verisi yok",
                         style: TextStyle(
                           fontSize: 20.0,
                         ),)
@@ -495,7 +502,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Text(
-                    time.hour.toString()+":"+time.minute.toString()+" " +time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
+                    time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
                     style: TextStyle(
                         fontSize: 15.0
                     ),
@@ -542,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   Text(
-                    time.hour.toString()+":"+time.minute.toString()+" " +time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
+                    time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
                     style: TextStyle(
                         fontSize: 15.0
                     ),
