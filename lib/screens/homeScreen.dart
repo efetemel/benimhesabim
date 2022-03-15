@@ -1,8 +1,6 @@
 import 'package:benimhesabim/components/addTransaction.dart';
-import 'package:benimhesabim/models/expense.dart';
 import 'package:benimhesabim/screens/RecentProcView.dart';
-import 'package:benimhesabim/utils/dbHelper.dart';
-import 'package:decimal/decimal.dart';
+import 'package:benimhesabim/utils/moneyManager.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,7 +11,7 @@ import '../constants.dart';
 class HomeScreen extends StatefulWidget {
   String name;
 
-  HomeScreen(this.name);
+  HomeScreen(this.name, {Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,95 +19,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  DbHelper dbHelper = DbHelper();
-
-  DateTime today = DateTime.now();
-
-  double totalBalance = 0.0;
-  double totalIncome = 0.0;
-  double totalExpense = 0.0;
-
-  List<FlSpot> dataSetExpense = [];
-  List<FlSpot> dataSetInCome = [];
-
-  List<FlSpot> getExpensePlotPoints(Map entireData){
-
-    dataSetExpense = [];
-    entireData.forEach((key, value) {
-      if(value["type"] == "Gider" && (value["date"] as DateTime).month == today.month){
-        dataSetExpense.add(
-          FlSpot(
-              (value["date"] as DateTime).day.toDouble(),
-              (value["amount"] as double).toDouble(),
-          )
-        );
-      }
-    });
-
-    return dataSetExpense;
-  }
-  
-  double getExpenseTotalMount(Map entireData){
-    double total = 0.0;
-    entireData.forEach((key, value) {
-      if (value["type"] == "Gider" &&
-          (value["date"] as DateTime).month == today.month) {
-        total += value["amount"];
-      }
-    });
-    return total;
-  }
-
-  double getInComeTotalMount(Map entireData){
-    double total = 0.0;
-    entireData.forEach((key, value) {
-      if (value["type"] == "Gelir" &&
-          (value["date"] as DateTime).month == today.month) {
-        total += value["amount"];
-      }
-    });
-    return total;
-  }
-
-  List<FlSpot> getInComePlotPoints(Map entireData){
-
-    dataSetInCome = [];
-    entireData.forEach((key, value) {
-      if(value["type"] == "Gelir" && (value["date"] as DateTime).month == today.month){
-        dataSetInCome.add(
-            FlSpot(
-              (value["date"] as DateTime).day.toDouble(),
-              (value["amount"] as double).toDouble(),
-            )
-        );
-      }
-    });
-
-    return dataSetInCome;
-  }
-
-  getTotalBalance(Map entireData){
-
-    totalBalance = 0.0;
-    totalIncome = 0.0;
-    totalExpense = 0.0;
-
-    entireData.forEach((key, value) {
-      if(value['type'] == "Gelir"){
-        totalBalance += value['amount'];
-        totalIncome += value['amount'];
-      }
-      else{
-        totalBalance -= value['amount'];
-        totalExpense += value['amount'];
-      }
-    });
-  }
-
+  MoneyManger moneyManger = MoneyManger();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -126,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: FutureBuilder<Map>(
-          future: dbHelper.fetch(),
+          future: MoneyManger.dbHelper.fetch(),
           builder: (context,snapshot){
             if(snapshot.connectionState == ConnectionState.waiting)
               return Center(child: CircularProgressIndicator());
@@ -136,14 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
               if(snapshot.data!.isEmpty){
                 return Center(child: Text("Henüz işlem yok!"));
               }
-              getTotalBalance(snapshot.data!);
-              getExpensePlotPoints(snapshot.data!);
-              getInComePlotPoints(snapshot.data!);
-              String balanceDotAfter = totalBalance.toDouble().toString().split('.').last;
-              String balanceDotBefore = totalBalance.toDouble().toString().split('.').first;
-              if(balanceDotAfter.isNotEmpty && balanceDotAfter.length >= 2){
-                balanceDotAfter = balanceDotAfter.substring(0,2);
-              }
+              MoneyManger.getTotalBalance(snapshot.data!);
+              /*getExpensePlotPoints(snapshot.data!);
+              getInComePlotPoints(snapshot.data!);*/
+
 
               return ListView(
                 children: [
@@ -191,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           Text(
-                            balanceDotBefore+"."+balanceDotAfter + " TL",
+                            MoneyManger.totalBalanceStr(MoneyManger.totalBalance),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 22.0,
@@ -203,8 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              cardIncome(getInComeTotalMount(snapshot.data!)),
-                              cardExpense(getExpenseTotalMount(snapshot.data!))
+                              moneyManger.cardIncome(MoneyManger.getInComeTotalMount(snapshot.data!)),
+                              moneyManger.cardExpense(MoneyManger.getExpenseTotalMount(snapshot.data!))
                             ],
                           ),)
                         ],
@@ -232,13 +141,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context,index){
                       Map dataAtIndex = snapshot.data![index];
                       if(dataAtIndex['type'] == "Gider")
-                        return expenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return moneyManger.expenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
                       else
-                        return incomeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return moneyManger.incomeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
 
                     },
                   ),
-                  
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.0),
                     child:ElevatedButton(
@@ -249,147 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(secondaryColor)),),
                   ),
 
-                  const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(
-                      "Giderler",
-                      style: TextStyle(
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.w900
-                      ),
-                    ),
-                  ),
-                  
-                  dataSetExpense.length < 2 ? Container(
-                    height: 400.0,
-                    decoration: BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 5,
-                              blurRadius: 6,
-                              offset: Offset(0,4)
-                          )
-                        ]
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 40.0
-                    ),
-                    margin: EdgeInsets.all(12.0),
-                    child: Text("Gösterilecek bir gider verisi yok",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),)
-                  )
-                      : Container(
-                    height: 400.0,
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      borderRadius: BorderRadius.circular(8.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          spreadRadius: 5,
-                          blurRadius: 6,
-                          offset: Offset(0,4)
-                        )
-                      ]
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 40.0
-                    ),
-                    margin: EdgeInsets.all(12.0),
-                    child: LineChart(
-                      LineChartData(
-                        borderData: FlBorderData(
-                          show: false
-                        ),
-                        lineBarsData:[
-                          LineChartBarData(
-                              spots: getExpensePlotPoints(snapshot.data!),
-                            isCurved: false,
-                            barWidth: 2.5
-                          )
-                        ]
-                      )
-                    ),
-                  ),
-
-
-                  const Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(
-                      "Gelirler",
-                      style: TextStyle(
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.w900
-                      ),
-                    ),
-                  ),
-
-                  dataSetInCome.length < 2 ?
-                  Container(
-                      height: 400.0,
-                      decoration: BoxDecoration(
-                          color: secondaryColor,
-                          borderRadius: BorderRadius.circular(8.0),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                spreadRadius: 5,
-                                blurRadius: 6,
-                                offset: Offset(0,4)
-                            )
-                          ]
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 8.0,
-                          vertical: 40.0
-                      ),
-                      margin: EdgeInsets.all(12.0),
-                      child: Text("Gösterilecek bir gelir verisi yok",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                        ),)
-                  )
-                      : Container(
-                    height: 400.0,
-                    decoration: BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.circular(8.0),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 5,
-                              blurRadius: 6,
-                              offset: Offset(0,4)
-                          )
-                        ]
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 8.0,
-                        vertical: 40.0
-                    ),
-                    margin: EdgeInsets.all(12.0),
-                    child: LineChart(
-                        LineChartData(
-                            borderData: FlBorderData(
-                                show: false
-                            ),
-                            lineBarsData:[
-                              LineChartBarData(
-                                  spots: getInComePlotPoints(snapshot.data!),
-                                  isCurved: false,
-                                  barWidth: 2.5
-                              )
-                            ]
-                        )
-                    ),
-                  ),
 
 
                 ],
@@ -403,174 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
       )
     );
   }
-  Widget cardIncome(double value){
-    return Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.white60,
-              borderRadius: BorderRadius.circular(20.0)
-          ),
-          padding: EdgeInsets.all(6.0),
-          child: Icon(Icons.arrow_downward,
-              size: 28.0,
-              color: Colors.green[700]),
-          margin: EdgeInsets.only(
-              right: 8.0
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Aylık Gelir",
-              style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.white70
-              ),),
-            Text(
-              Decimal.parse(totalIncome.toString()).toString() + " TL",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white70
-              ),)
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget cardExpense(double value){
-    return Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.white60,
-              borderRadius: BorderRadius.circular(20.0)
-          ),
-          padding: EdgeInsets.all(6.0),
-          child: Icon(Icons.arrow_upward,
-              size: 28.0,
-              color: Colors.red[700]),
-          margin: EdgeInsets.only(
-              right: 8.0
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Aylık Gider",
-              style: TextStyle(
-                  fontSize: 14.0,
-                  color: Colors.white70
-              ),),
-            Text(
-              Decimal.parse(totalExpense.toString()).toString() + " TL",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white70
-              ),)
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget expenseTile(double value,String name,DateTime time){
-    return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(18.0),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(8.0)
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.arrow_circle_up,size: 28.0,color: Colors.red[700],),
-              SizedBox(width: 4.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "$name",
-                    style: TextStyle(
-                        fontSize: 20.0
-                    ),
-                  ),
-                  Text(
-                    time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
-                    style: TextStyle(
-                        fontSize: 15.0
-                    ),
-                  ),
-                ],
-              )
-
-            ],
-          ),
-          Text(
-              "- $value TL",
-            style: TextStyle(
-              fontSize: 24.0,
-              fontWeight: FontWeight.w700
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget incomeTile(double value,String name,DateTime time){
-    return Container(
-      margin: EdgeInsets.all(8.0),
-      padding: EdgeInsets.all(18.0),
-      decoration: BoxDecoration(
-          color: secondaryColor,
-          borderRadius: BorderRadius.circular(8.0)
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.arrow_circle_down,size: 28.0,color: Colors.green[700],),
-              SizedBox(width: 4.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "$name",
-                    style: TextStyle(
-                        fontSize: 20.0
-                    ),
-                  ),
-                  Text(
-                    time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
-                    style: TextStyle(
-                        fontSize: 15.0
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          Text(
-            "+ $value TL",
-            style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.w700
-            ),
-          )
-        ],
-      ),
-    );
-  }
 
 }
 
-
-//https://youtu.be/VOWy5-zTeWk?t=4790
