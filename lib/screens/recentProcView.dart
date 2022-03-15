@@ -1,4 +1,8 @@
+import 'package:benimhesabim/components/expenseCart.dart';
+import 'package:benimhesabim/components/inComeCart.dart';
 import 'package:flutter/material.dart';
+import '../components/expenseTile.dart';
+import '../components/inComeTile.dart';
 import '../constants.dart';
 import '../utils/moneyManager.dart';
 
@@ -74,10 +78,10 @@ class _RecentProcViewState extends State<RecentProcView> {
                                   mainAxisAlignment: MainAxisAlignment
                                       .spaceBetween,
                                   children: [
-                                    moneyManger.cardIncome(
+                                    InComeCart(
                                         MoneyManger.getInComeTotalMount(
                                             snapshot.data!)),
-                                    moneyManger.cardExpense(
+                                    ExpenseCart(
                                         MoneyManger.getExpenseTotalMount(
                                             snapshot.data!))
                                   ],
@@ -106,14 +110,10 @@ class _RecentProcViewState extends State<RecentProcView> {
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
                           Map dataAtIndex = snapshot.data![index];
-                          if (dataAtIndex['type'] == "Gider")
-                            return moneyManger.expenseTile(
-                                dataAtIndex["amount"], dataAtIndex["name"],
-                                dataAtIndex["date"]);
+                          if(dataAtIndex['type'] == "Gider")
+                            return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
                           else
-                            return moneyManger.incomeTile(
-                                dataAtIndex["amount"], dataAtIndex["name"],
-                                dataAtIndex["date"]);
+                            return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
                         },
                       ),
 

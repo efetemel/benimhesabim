@@ -1,5 +1,9 @@
-import 'package:benimhesabim/components/addTransaction.dart';
-import 'package:benimhesabim/screens/RecentProcView.dart';
+import 'package:benimhesabim/components/expenseCart.dart';
+import 'package:benimhesabim/components/expenseTile.dart';
+import 'package:benimhesabim/components/inComeCart.dart';
+import 'package:benimhesabim/components/inComeTile.dart';
+import 'package:benimhesabim/screens/addTransactionView.dart';
+import 'package:benimhesabim/screens/recentProcView.dart';
 import 'package:benimhesabim/utils/moneyManager.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTransaction())).whenComplete(() {setState(() {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransaction())).whenComplete(() {setState(() {
 
           });});
         },
@@ -50,9 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Center(child: Text("Henüz işlem yok!"));
               }
               MoneyManger.getTotalBalance(snapshot.data!);
-              /*getExpensePlotPoints(snapshot.data!);
-              getInComePlotPoints(snapshot.data!);*/
-
 
               return ListView(
                 children: [
@@ -112,8 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              moneyManger.cardIncome(MoneyManger.getInComeTotalMount(snapshot.data!)),
-                              moneyManger.cardExpense(MoneyManger.getExpenseTotalMount(snapshot.data!))
+                              InComeCart(MoneyManger.getInComeTotalMount(snapshot.data!)),
+                              ExpenseCart(MoneyManger.getExpenseTotalMount(snapshot.data!))
                             ],
                           ),)
                         ],
@@ -141,9 +142,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context,index){
                       Map dataAtIndex = snapshot.data![index];
                       if(dataAtIndex['type'] == "Gider")
-                        return moneyManger.expenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
                       else
-                        return moneyManger.incomeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
 
                     },
                   ),
