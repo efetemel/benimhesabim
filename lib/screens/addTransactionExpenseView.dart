@@ -8,18 +8,17 @@ import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddTransaction extends StatefulWidget {
-  const AddTransaction({Key? key}) : super(key: key);
+class AddTransactionExpenseView extends StatefulWidget {
+  const AddTransactionExpenseView({Key? key}) : super(key: key);
 
   @override
-  State<AddTransaction> createState() => _AddTransactionState();
+  State<AddTransactionExpenseView> createState() => _AddTransactionExpenseViewState();
 }
 
-class _AddTransactionState extends State<AddTransaction> {
+class _AddTransactionExpenseViewState extends State<AddTransactionExpenseView> {
 
   final amount = TextEditingController();
   final name = TextEditingController();
-  final type = TextEditingController();
   DateTime date = DateTime.now();
 
   List<String> months = [
@@ -57,7 +56,7 @@ class _AddTransactionState extends State<AddTransaction> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("İşlem ekle"),),
+      appBar: AppBar(title: Text("Gider ekle"),),
         body: SafeArea(
       child: ListView(
         padding: EdgeInsets.all(12.0),
@@ -110,58 +109,6 @@ class _AddTransactionState extends State<AddTransaction> {
               )),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Icon(Icons.moving_rounded,
-                      size: 24, color: Colors.white)),
-              SizedBox(width: 12.0),
-              ChoiceChip(
-                label: Text(
-                  "Gelir",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color:
-                          type.text == "Gelir" ? Colors.white : Colors.white),
-                ),
-                selected: type.text == "Gelir" ? true : false,
-                selectedColor: primaryColor,
-                onSelected: (val) {
-                  if (val) {
-                    setState(() {
-                      type.text = "Gelir";
-                    });
-                  }
-                },
-              ),
-              SizedBox(width: 12.0),
-              ChoiceChip(
-                label: Text(
-                  "Gider",
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color:
-                          type.text == "Gider" ? Colors.white : Colors.white),
-                ),
-                selected: type.text == "Gider" ? true : false,
-                selectedColor: primaryColor,
-                onSelected: (val) {
-                  if (val) {
-                    setState(() {
-                      type.text = "Gider";
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 20.0),
           SizedBox(
               height: 50.0,
               child: TextButton(
@@ -192,7 +139,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     if(amount.text.isNotEmpty && name.text.isNotEmpty){
                       try{
                         double _amount = double.parse(amount.text);
-                        await DbHelper().addData(_amount, date, name.text, type.text);
+                        await DbHelper().addData(_amount, date, name.text, "Gider");
                         Navigator.of(context).pop();
                       }catch(err){
                         ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup("Lütfen para miktarını doğru giriniz!", "Tamam", () { }, Colors.white));

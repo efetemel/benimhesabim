@@ -2,7 +2,8 @@ import 'package:benimhesabim/components/expenseCart.dart';
 import 'package:benimhesabim/components/expenseTile.dart';
 import 'package:benimhesabim/components/inComeCart.dart';
 import 'package:benimhesabim/components/inComeTile.dart';
-import 'package:benimhesabim/screens/addTransactionView.dart';
+import 'package:benimhesabim/screens/addSelect.dart';
+import 'package:benimhesabim/screens/addTransactionInComeView.dart';
 import 'package:benimhesabim/screens/recentProcView.dart';
 import 'package:benimhesabim/utils/moneyManager.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransaction())).whenComplete(() {setState(() {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddSelect())).whenComplete(() {setState(() {
 
           });});
         },

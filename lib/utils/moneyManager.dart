@@ -1,6 +1,7 @@
 import 'dbHelper.dart';
 
 class MoneyManger{
+
   static DbHelper dbHelper = DbHelper();
 
   static DateTime today = DateTime.now();
