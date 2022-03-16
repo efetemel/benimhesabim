@@ -1,5 +1,5 @@
-import 'package:benimhesabim/screens/homeScreen.dart';
-import 'package:benimhesabim/screens/welcomeScreen.dart';
+import 'package:benimhesabim/screens/homeView.dart';
+import 'package:benimhesabim/screens/welcomeView.dart';
 import 'package:benimhesabim/utils/dbHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

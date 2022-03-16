@@ -1,5 +1,5 @@
-import 'package:benimhesabim/screens/addTransactionExpenseView.dart';
-import 'package:benimhesabim/screens/addTransactionInComeView.dart';
+import 'package:benimhesabim/screens/transactions/addTransactionExpenseView.dart';
+import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart';
 import 'package:flutter/material.dart';
 
 class TransactionProcView extends StatelessWidget {
@@ -28,10 +28,27 @@ class TransactionProcView extends StatelessWidget {
           ),
           ListTile(
             leading: Text(
+              "₺ +",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            title: Text("Gelir sil"),
+            onTap: () {handleAddInCome(context);},
+          ),
+          Divider(),
+          ListTile(
+            leading: Text(
               "₺ -",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             title: Text("Gider ekle"),
+            onTap: () {handleAddExpense(context);},
+          ),
+          ListTile(
+            leading: Text(
+              "₺ -",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            title: Text("Gider sil"),
             onTap: () {handleAddExpense(context);},
           ),
         ],

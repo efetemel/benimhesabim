@@ -1,4 +1,4 @@
-import 'package:benimhesabim/screens/homeScreen.dart';
+import 'package:benimhesabim/screens/homeView.dart';
 import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

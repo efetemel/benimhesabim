@@ -1,5 +1,7 @@
-import 'package:benimhesabim/screens/TransactionProcView.dart';
-import 'package:benimhesabim/screens/addTransactionInComeView.dart';
+import 'package:benimhesabim/screens/categories/addCategoryView.dart';
+import 'package:benimhesabim/screens/categories/categoryProcView.dart';
+import 'package:benimhesabim/screens/transactions/transactionProcView.dart';
+import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -8,7 +10,7 @@ class AddSelect extends StatelessWidget {
 
 
   handleCategory(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddSelect()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CategoryProcView()));
   }
 
   handleTransaction(BuildContext context){
