@@ -15,12 +15,13 @@ class DbHelper{
      boxExpense = Hive.box('benimhesabimExCategory');
    }
 
-   Future addData(double amount,DateTime date,String name,String type) async{
+   Future addData(double amount,DateTime date,String name,String type,String category) async{
      var value = {
        'amount':amount,
        'date':date,
        'name':name,
-       'type':type
+       'type':type,
+       'category':category
      };
      box.add(value);
    }

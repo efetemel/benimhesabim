@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:math';
 
 import 'package:benimhesabim/constants.dart';
+import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
 import 'package:benimhesabim/utils/dbHelper.dart';
 import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,6 @@ class AddTransaction extends StatefulWidget {
 }
 
 class _AddTransactionState extends State<AddTransaction> {
-
   final amount = TextEditingController();
   final name = TextEditingController();
   DateTime date = DateTime.now();
@@ -48,181 +48,212 @@ class _AddTransactionState extends State<AddTransaction> {
         cancelText: "İptal",
         confirmText: "Seç",
         initialEntryMode: DatePickerEntryMode.calendarOnly);
-      if (picked != null && picked != date) {
+    if (picked != null && picked != date) {
       setState(() {
         date = picked;
       });
     }
   }
 
-  List<String> inComeCategory = ["test","test2"];
-  String dropValue = "sa";
+  List<String> inComeCategory = [];
+  String dropValue = "";
   MoneyManger moneyManger = MoneyManger();
+
+  handleAddInComeCategory(BuildContext context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const AddInComeCategory()));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Gelir ekle"),),
+        appBar: AppBar(
+          title: Text("Gelir ekle"),
+        ),
         body: SafeArea(
-      child: FutureBuilder<Map>(
-        future: MoneyManger.dbHelper.getInComeCategory(),
-        builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
-          if(snapshot.hasError)
-          return Center(child: CircularProgressIndicator());
-          if(snapshot.hasData) {
-            if(snapshot.data!.isNotEmpty){
-              print(snapshot.data);
-            }
-            return ListView(
-              padding: EdgeInsets.all(12.0),
-              children: [
-                SizedBox(height: 20.0),
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 6),
-                      child: Text(
-                        "₺",
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight
-                            .bold),
+            child: FutureBuilder<Map>(
+          future: MoneyManger.dbHelper.getInComeCategory(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(child: CircularProgressIndicator());
+            if (snapshot.hasError)
+              return Center(child: CircularProgressIndicator());
+            if (snapshot.hasData) {
+              if (snapshot.data!.isNotEmpty) {
+                if (inComeCategory.isEmpty ||
+                    inComeCategory.length != snapshot.data!.length) {
+                  snapshot.data!.values.forEach((element) {
+                    inComeCategory.add(element["name"]);
+                  });
+                  dropValue = inComeCategory.first.isNotEmpty
+                      ? inComeCategory.first
+                      : "";
+                }
+              }
+              return ListView(
+                padding: EdgeInsets.all(12.0),
+                children: [
+                  SizedBox(height: 20.0),
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(10.0)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                        child: Text(
+                          "₺",
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 12.0),
-                    Expanded(
-                        child: TextFormField(
-                          controller: amount,
-
-                          decoration:
-                          InputDecoration(
-                              hintText: "Örn: 20.23", border: InputBorder.none),
-                          style: TextStyle(fontSize: 24.0),
-                          keyboardType: TextInputType.numberWithOptions(
-                              decimal: true),
-                        )),
-                  ],
-                ),
-                SizedBox(height: 20.0),
-                Row(
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(10.0)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child: Icon(Icons.category)
-                    ),
-                    SizedBox(width: 12.0),
-                    Expanded(
-                        child: DropdownButton(
-                          value: dropValue,
-                          hint: Text("Gelir Kategorisi Seçin"),
-                          items: [
-                            DropdownMenuItem(child: Text("sa"),value: "sa",)
-                          ], onChanged: (value) {  },
-
-                        )
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(10.0)),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 10),
-                        child:
-                        Icon(Icons.description, size: 24, color: Colors.white)),
-                    SizedBox(width: 12.0),
-                    Expanded(
-                        child: TextField(
-                          controller: name,
-                          decoration: InputDecoration(
-                              hintText: "İşlem Adı", border: InputBorder.none),
-                          style: TextStyle(fontSize: 24.0),
-                          maxLength: 24,
-                        )),
-                  ],
-                ),
-                SizedBox(
-                    height: 50.0,
-                    child: TextButton(
-                        onPressed: () {
-                          _selectDate(context);
-                        },
-                        style: ButtonStyle(
-                            padding: MaterialStateProperty.all(
-                                EdgeInsets.zero)),
-                        child: Row(
-                          children: [
-                            Container(
-                                decoration: BoxDecoration(
-                                    color: primaryColor,
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 10),
-                                child: Icon(Icons.date_range_rounded,
-                                    size: 24, color: Colors.white)),
-                            SizedBox(width: 12.0),
-                            Text("${date.day} ${months[date.month - 1]}"),
-                          ],
-                        ))),
-                SizedBox(height: 20.0),
-                SizedBox(
-                    height: 50.0,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          if (amount.text.isNotEmpty && name.text.isNotEmpty) {
-                            try {
-                              double _amount = double.parse(amount.text);
-                              await DbHelper().addData(
-                                  _amount, date, name.text, "Gelir");
-                              Navigator.of(context).pop();
-                            } catch (err) {
+                      SizedBox(width: 12.0),
+                      Expanded(
+                          child: TextFormField(
+                        controller: amount,
+                        decoration: InputDecoration(
+                            hintText: "Örn: 20.23", border: InputBorder.none),
+                        style: TextStyle(fontSize: 24.0),
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                      )),
+                    ],
+                  ),
+                  SizedBox(height: 20.0),
+                  Row(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Icon(Icons.category)),
+                      SizedBox(width: 12.0),
+                      dropValue != ""
+                          ? Expanded(
+                              child: DropdownButton<String>(
+                               value: dropValue,
+                              hint: new Text(
+                                'Select visitng purpose',
+                                style: TextStyle(fontFamily: "Gotham"),
+                              ),
+                              items: inComeCategory.map((purposeTemp) {
+                                return new DropdownMenuItem<String>(
+                                  value: purposeTemp,
+                                  child: new Text(
+                                    purposeTemp,
+                                    style: TextStyle(fontFamily: "Gotham"),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (purpose) {
+                                setState(() {
+                                  dropValue = purpose!;
+                                });
+                              },
+                            ))
+                          : Container(
+                              child: TextButton(
+                                  onPressed: () {
+                                    handleAddInComeCategory(context);
+                                  },
+                                  child: Text("Gelir kategorisi ekle"))),
+                    ],
+                  ),
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(10.0)),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Icon(Icons.description,
+                              size: 24, color: Colors.white)),
+                      SizedBox(width: 12.0),
+                      Expanded(
+                          child: TextField(
+                        controller: name,
+                        decoration: InputDecoration(
+                            hintText: "İşlem Adı", border: InputBorder.none),
+                        style: TextStyle(fontSize: 24.0),
+                        maxLength: 24,
+                      )),
+                    ],
+                  ),
+                  SizedBox(
+                      height: 50.0,
+                      child: TextButton(
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero)),
+                          child: Row(
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: primaryColor,
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  child: Icon(Icons.date_range_rounded,
+                                      size: 24, color: Colors.white)),
+                              SizedBox(width: 12.0),
+                              Text("${date.day} ${months[date.month - 1]}"),
+                            ],
+                          ))),
+                  SizedBox(height: 20.0),
+                  SizedBox(
+                      height: 50.0,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            if (amount.text.isNotEmpty &&
+                                name.text.isNotEmpty) {
+                              try {
+                                double _amount = double.parse(amount.text);
+                                await DbHelper()
+                                    .addData(_amount, date, name.text, "Gelir",dropValue);
+                                Navigator.of(context).pop();
+                              } catch (err) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBarUtil().snackBarSetup(
+                                        "Lütfen para miktarını doğru giriniz!",
+                                        "Tamam",
+                                        () {},
+                                        Colors.white));
+                              }
+                            } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBarUtil().snackBarSetup(
-                                      "Lütfen para miktarını doğru giriniz!",
-                                      "Tamam", () {}, Colors.white));
+                                      "Boş alan bırakmayınız!",
+                                      "Tamam",
+                                      () {},
+                                      Colors.white));
                             }
-                          }
-                          else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBarUtil().snackBarSetup(
-                                    "Boş alan bırakmayınız!", "Tamam", () {},
-                                    Colors.white));
-                          }
-                        },
-                        child: Text(
-                          "Ekle",
-                          style:
-                          TextStyle(
-                              fontSize: 20.0, fontWeight: FontWeight.w600),
-                        )))
-              ],
-            );
-
-
-          }
-          else{
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      )
-    ));
+                          },
+                          child: Text(
+                            "Ekle",
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.w600),
+                          )))
+                ],
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        )));
   }
 
-  DropdownMenuItem getCategoryItem(snapshot){
+  DropdownMenuItem getCategoryItem(snapshot) {
     return snapshot.data!.forEach((key, value) {
       return DropdownMenuItem(child: Text("sa"));
     });
