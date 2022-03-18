@@ -15,7 +15,7 @@ class TransactionProcView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Bakiye işlemleri")),
+      appBar: AppBar(title: const Text("Bakiye işlemleri")),
       body: ListView(
         children: [
           ListTile(
@@ -26,29 +26,13 @@ class TransactionProcView extends StatelessWidget {
             title: Text("Gelir ekle"),
             onTap: () {handleAddInCome(context);},
           ),
-          ListTile(
-            leading: Text(
-              "₺ +",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            title: Text("Gelir sil"),
-            onTap: () {handleAddInCome(context);},
-          ),
-          Divider(),
+          const Divider(),
           ListTile(
             leading: Text(
               "₺ -",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             title: Text("Gider ekle"),
-            onTap: () {handleAddExpense(context);},
-          ),
-          ListTile(
-            leading: Text(
-              "₺ -",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            title: Text("Gider sil"),
             onTap: () {handleAddExpense(context);},
           ),
         ],

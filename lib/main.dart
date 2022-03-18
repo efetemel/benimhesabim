@@ -14,6 +14,8 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('benimhesabim');
+  await Hive.openBox('benimhesabimInCategory');
+  await Hive.openBox('benimhesabimExCategory');
   prefs = await SharedPreferences.getInstance();
   runApp(MyApp());
 }

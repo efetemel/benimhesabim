@@ -59,4 +59,5 @@ class MoneyManger{
     return balanceDotBefore+"."+balanceDotAfter+" TL";
   }
 
+
 }

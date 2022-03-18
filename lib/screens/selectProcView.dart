@@ -1,4 +1,3 @@
-import 'package:benimhesabim/screens/categories/addCategoryView.dart';
 import 'package:benimhesabim/screens/categories/categoryProcView.dart';
 import 'package:benimhesabim/screens/transactions/transactionProcView.dart';
 import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart';

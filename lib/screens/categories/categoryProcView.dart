@@ -1,56 +1,41 @@
-import 'package:benimhesabim/screens/transactions/addTransactionExpenseView.dart';
-import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart';
+import 'package:benimhesabim/screens/categories/addExpenseCategory.dart';
+import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
 import 'package:flutter/material.dart';
 
 class CategoryProcView extends StatelessWidget {
   const CategoryProcView({Key? key}) : super(key: key);
 
-  handleAddInCome(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransaction()));
+  handleAddInComeCategory(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddInComeCategory()));
   }
-  handleAddExpense(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransactionExpenseView()));
+
+  handleAddExpenseCategory(BuildContext context){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddExpenseCategory()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Kategori işlemleri")),
+      appBar: AppBar(title: const Text("Kategori işlemleri")),
       body: ListView(
         children: [
           ListTile(
-            leading: Text(
+            leading: const Text(
               "₺ +",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            title: Text("Gelir Kategorisi ekle"),
-            onTap: () {handleAddInCome(context);},
+            title: const Text("Gelir Kategorisi ekle"),
+            onTap: () {handleAddInComeCategory(context);},
 
           ),
+          const Divider(),
           ListTile(
-            leading: Text(
+            leading: const Text(
               "₺ -",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            title: Text("Gelir Kategorisi sil"),
-            onTap: () {handleAddExpense(context);},
-          ),
-          Divider(),
-          ListTile(
-            leading: Text(
-              "₺ +",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            title: Text("Gider Kategorisi ekle"),
-            onTap: () {handleAddInCome(context);},
-          ),
-          ListTile(
-            leading: Text(
-              "₺ -",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            title: Text("Gider Kategorisi sil"),
-            onTap: () {handleAddExpense(context);},
+            title: const Text("Gider Kategorisi ekle"),
+            onTap: () {handleAddExpenseCategory(context);},
           ),
         ],
       ),
