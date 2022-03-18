@@ -21,6 +21,7 @@ class _AddInComeCategoryState extends State<AddInComeCategory> {
       var category = MoneyManger.dbHelper.getInComeCategoryQ(categoryName.text);
       if(category == null){
         MoneyManger.dbHelper.addInComeCategory(categoryName.text);
+        Navigator.pop(context);
         return ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup(
             "Kategori eklendi!", "Tamam", () {},
             Colors.white));

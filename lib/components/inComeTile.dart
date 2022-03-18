@@ -6,9 +6,10 @@ class InComeTile extends StatelessWidget {
 
   double value;
   String name;
+  String category;
   DateTime time;
 
-  InComeTile(this.value, this.name, this.time, {Key? key}) : super(key: key);
+  InComeTile(this.value, this.name, this.time,this.category, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,13 @@ class InComeTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
+                    "İşlem Tarihi: "+time.day.toString()+"."+time.month.toString()+"."+time.year.toString(),
+                    style: TextStyle(
+                        fontSize: 15.0
+                    ),
+                  ),
+                  Text(
+                    "Kategori: "+category,
                     style: TextStyle(
                         fontSize: 15.0
                     ),

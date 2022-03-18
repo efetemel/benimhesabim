@@ -3,13 +3,17 @@ import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart'
 import 'package:flutter/material.dart';
 
 class TransactionProcView extends StatelessWidget {
-  const TransactionProcView({Key? key}) : super(key: key);
+
+  String name;
+
+
+  TransactionProcView(this.name);
 
   handleAddInCome(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransaction()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTransaction(name)));
   }
   handleAddExpense(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddTransactionExpenseView()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddTransactionExpenseView(name)));
   }
 
   @override

@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddSelect())).whenComplete(() {setState(() {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  AddSelect(widget.name))).whenComplete(() {setState(() {
 
           });});
         },
@@ -143,9 +143,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context,index){
                       Map dataAtIndex = snapshot.data![index];
                       if(dataAtIndex['type'] == "Gider")
-                        return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
                       else
-                        return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                        return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
 
                     },
                   ),

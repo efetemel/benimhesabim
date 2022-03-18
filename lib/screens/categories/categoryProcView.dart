@@ -3,7 +3,11 @@ import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
 import 'package:flutter/material.dart';
 
 class CategoryProcView extends StatelessWidget {
-  const CategoryProcView({Key? key}) : super(key: key);
+
+  String name;
+
+
+  CategoryProcView(this.name);
 
   handleAddInComeCategory(BuildContext context){
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddInComeCategory()));

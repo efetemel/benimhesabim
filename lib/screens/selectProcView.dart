@@ -5,15 +5,18 @@ import 'package:flutter/material.dart';
 
 import '../constants.dart';
 class AddSelect extends StatelessWidget {
-  const AddSelect({Key? key}) : super(key: key);
 
+  String name;
+
+
+  AddSelect(this.name);
 
   handleCategory(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CategoryProcView()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  CategoryProcView(name)));
   }
 
   handleTransaction(BuildContext context){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const TransactionProcView()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  TransactionProcView(name)));
 
   }
 

@@ -3,7 +3,9 @@ import 'dart:ffi';
 import 'dart:math';
 
 import 'package:benimhesabim/constants.dart';
+import 'package:benimhesabim/screens/categories/addExpenseCategory.dart';
 import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
+import 'package:benimhesabim/screens/homeView.dart';
 import 'package:benimhesabim/utils/dbHelper.dart';
 import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,10 @@ import 'package:flutter/services.dart';
 import '../../utils/moneyManager.dart';
 
 class AddTransactionExpenseView extends StatefulWidget {
-  const AddTransactionExpenseView({Key? key}) : super(key: key);
+  String name;
+
+
+  AddTransactionExpenseView(this.name);
 
   @override
   State<AddTransactionExpenseView> createState() => _AddTransactionState();
@@ -59,9 +64,9 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
   String dropValue = "";
   MoneyManger moneyManger = MoneyManger();
 
-  handleAddInComeCategory(BuildContext context) {
+  handleAddExpenseCategory(BuildContext context) {
     Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const AddInComeCategory()));
+        MaterialPageRoute(builder: (context) => const AddExpenseCategory()));
   }
 
   @override
@@ -157,9 +162,9 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                               : Container(
                               child: TextButton(
                                   onPressed: () {
-                                    handleAddInComeCategory(context);
+                                    handleAddExpenseCategory(context);
                                   },
-                                  child: Text("Gelir kategorisi ekle"))),
+                                  child: Text("Gider kategorisi ekle"))),
                         ],
                       ),
                       SizedBox(height: 20.0),
@@ -221,7 +226,8 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                                     double _amount = double.parse(amount.text);
                                     await DbHelper()
                                         .addData(_amount, date, name.text, "Gider",dropValue);
-                                    Navigator.of(context).pop();
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(widget.name)));
+
                                   } catch (err) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBarUtil().snackBarSetup(

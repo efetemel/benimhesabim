@@ -111,9 +111,9 @@ class _RecentProcViewState extends State<RecentProcView> {
                         itemBuilder: (context, index) {
                           Map dataAtIndex = snapshot.data![index];
                           if(dataAtIndex['type'] == "Gider")
-                            return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                            return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
                           else
-                            return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"]);
+                            return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
                         },
                       ),
 

@@ -12,7 +12,11 @@ import 'package:flutter/services.dart';
 import '../../utils/moneyManager.dart';
 
 class AddTransaction extends StatefulWidget {
-  const AddTransaction({Key? key}) : super(key: key);
+
+  String name;
+
+
+  AddTransaction(this.name);
 
   @override
   State<AddTransaction> createState() => _AddTransactionState();
