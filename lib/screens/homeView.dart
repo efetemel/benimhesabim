@@ -10,7 +10,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0)
         ),
-        child: Icon(Icons.add,size: 32.0),
+        child: const Icon(Icons.add,size: 32.0),
       ),
       body: SafeArea(
         child: FutureBuilder<Map>(
@@ -52,23 +51,23 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(child: CircularProgressIndicator());
             if(snapshot.hasData){
               if(snapshot.data!.isEmpty){
-                return Center(child: Text("Henüz işlem yok!"));
+                return const Center(child: Text("Henüz işlem yok!"));
               }
               MoneyManger.getTotalBalance(snapshot.data!);
 
               return ListView(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
 
-                            SizedBox(width: 8.0),
+                            const SizedBox(width: 8.0),
                             Text("Hoşgeldin, ${widget.name}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w700,
                             ),)
@@ -80,21 +79,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    margin: EdgeInsets.all(12.0),
+                    margin: const EdgeInsets.all(12.0),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: secondaryColor,
                         borderRadius: BorderRadius.all(
                           Radius.circular(24.0)
                         )
                       ),
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
                         horizontal: 8.0
                       ),
                       child: Column(
                         children: [
-                          Text(
+                          const Text(
                             "Toplam Bakiye",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -104,13 +103,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             MoneyManger.totalBalanceStr(MoneyManger.totalBalance),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 22.0,
                               fontWeight: FontWeight.w700
                             ),
                           ),
-                          SizedBox(height: 12,),
-                          Padding(padding: EdgeInsets.all(8.0),
+                          const SizedBox(height: 12,),
+                          Padding(padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -151,12 +150,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child:ElevatedButton(
                       onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecentProcView()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RecentProcView()));
                       },
-                      child: Text("Daha Fazla Göster"),
+                      child: const Text("Daha Fazla Göster"),
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(secondaryColor)),),
                   ),
 
@@ -166,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             }
             else{
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         )
