@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: const [
-                            SizedBox(width: 8.0),
+                            SizedBox(width: 8.0,height: 55,),
                           ],
                         ),
                       ],

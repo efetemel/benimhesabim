@@ -85,7 +85,7 @@ class _RecentProcViewState extends State<RecentProcView> {
                                         MoneyManger.getExpenseTotalMount(
                                             snapshot.data!))
                                   ],
-                                ),)
+                                ),),
                             ],
                           ),
                         ),
@@ -104,7 +104,15 @@ class _RecentProcViewState extends State<RecentProcView> {
                             return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
                         },
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
 
+                          ],
+                        ),
+                      ),
 
                     ],
                   );
