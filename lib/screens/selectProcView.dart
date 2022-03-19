@@ -4,6 +4,7 @@ import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart'
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import '../utils/settings.dart';
 class AddSelect extends StatelessWidget {
 
   String name;
@@ -25,7 +26,7 @@ class AddSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text("İşlem seç")),
+      appBar: AppBar(title:Text(Settings.selectProccessText)),
       body: Container(
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height,
@@ -58,7 +59,7 @@ class AddSelect extends StatelessWidget {
                         Icon(Icons.category,size: 32),
                         SizedBox(height: 5),
                         Text(
-                          "Kategori\n İşlemleri",
+                          Settings.categoryProccessText,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 22.0
@@ -97,7 +98,7 @@ class AddSelect extends StatelessWidget {
                         ),
                         SizedBox(height: 5),
                         Text(
-                          "Bakiye\n İşlemleri",
+                          Settings.balanceProccessText,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 22.0

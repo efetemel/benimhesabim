@@ -92,18 +92,6 @@ class _RecentProcViewState extends State<RecentProcView> {
 
                       ),
 
-
-                      const Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Text(
-                          "Son İşlemler",
-                          style: TextStyle(
-                              fontSize: 32.0,
-                              fontWeight: FontWeight.w900
-                          ),
-                        ),
-                      ),
-
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),

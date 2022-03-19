@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../utils/moneyManager.dart';
+import '../../utils/settings.dart';
 
 class AddTransaction extends StatefulWidget {
 
@@ -48,9 +49,9 @@ class _AddTransactionState extends State<AddTransaction> {
         initialDate: date,
         firstDate: DateTime(2020, 12),
         lastDate: DateTime(DateTime.now().year + 3, 12),
-        helpText: "Tarih Seçin",
-        cancelText: "İptal",
-        confirmText: "Seç",
+        helpText: Settings.selectDateText,
+        cancelText: Settings.cancelText,
+        confirmText: Settings.selectText,
         initialEntryMode: DatePickerEntryMode.calendarOnly);
     if (picked != null && picked != date) {
       setState(() {
@@ -72,7 +73,7 @@ class _AddTransactionState extends State<AddTransaction> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Gelir ekle"),
+          title: Text(Settings.addInComeTransactionText),
         ),
         body: SafeArea(
             child: FutureBuilder<Map>(
@@ -117,7 +118,7 @@ class _AddTransactionState extends State<AddTransaction> {
                           child: TextFormField(
                         controller: amount,
                         decoration: InputDecoration(
-                            hintText: "Örn: 20.23", border: InputBorder.none),
+                            hintText:Settings.exmpBalanceHintText, border: InputBorder.none),
                         style: TextStyle(fontSize: 24.0),
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
@@ -140,7 +141,7 @@ class _AddTransactionState extends State<AddTransaction> {
                               child: DropdownButton<String>(
                                value: dropValue,
                               hint: new Text(
-                                'Select visitng purpose',
+                                Settings.selectDateText,
                                 style: TextStyle(fontFamily: "Gotham"),
                               ),
                               items: inComeCategory.map((purposeTemp) {
@@ -163,7 +164,7 @@ class _AddTransactionState extends State<AddTransaction> {
                                   onPressed: () {
                                     handleAddInComeCategory(context);
                                   },
-                                  child: Text("Gelir kategorisi ekle"))),
+                                  child: Text(Settings.addInComeCategoryText))),
                     ],
                   ),
                   SizedBox(height: 20.0),
@@ -184,7 +185,7 @@ class _AddTransactionState extends State<AddTransaction> {
                           child: TextField(
                         controller: name,
                         decoration: InputDecoration(
-                            hintText: "İşlem Adı", border: InputBorder.none),
+                            hintText: Settings.proccessNameHintText, border: InputBorder.none),
                         style: TextStyle(fontSize: 24.0),
                         maxLength: 24,
                       )),
@@ -229,22 +230,22 @@ class _AddTransactionState extends State<AddTransaction> {
                               } catch (err) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBarUtil().snackBarSetup(
-                                        "Lütfen para miktarını doğru giriniz!",
-                                        "Tamam",
+                                        Settings.invalidMoneyText,
+                                        Settings.okButtonText,
                                         () {},
                                         Colors.white));
                               }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBarUtil().snackBarSetup(
-                                      "Boş alan bırakmayınız!",
-                                      "Tamam",
+                                      Settings.emptyFieldsText,
+                                      Settings.okButtonText,
                                       () {},
                                       Colors.white));
                             }
                           },
                           child: Text(
-                            "Ekle",
+                            Settings.addButtonText,
                             style: TextStyle(
                                 fontSize: 20.0, fontWeight: FontWeight.w600),
                           )))
@@ -257,9 +258,4 @@ class _AddTransactionState extends State<AddTransaction> {
         )));
   }
 
-  DropdownMenuItem getCategoryItem(snapshot) {
-    return snapshot.data!.forEach((key, value) {
-      return DropdownMenuItem(child: Text("sa"));
-    });
-  }
 }

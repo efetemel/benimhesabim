@@ -7,6 +7,7 @@ import 'package:benimhesabim/screens/categories/addExpenseCategory.dart';
 import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
 import 'package:benimhesabim/screens/homeView.dart';
 import 'package:benimhesabim/utils/dbHelper.dart';
+import 'package:benimhesabim/utils/settings.dart';
 import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,9 +50,9 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
         initialDate: date,
         firstDate: DateTime(2020, 12),
         lastDate: DateTime(DateTime.now().year + 3, 12),
-        helpText: "Tarih Seçin",
-        cancelText: "İptal",
-        confirmText: "Seç",
+        helpText: Settings.selectDateText,
+        cancelText: Settings.cancelText,
+        confirmText: Settings.selectText,
         initialEntryMode: DatePickerEntryMode.calendarOnly);
     if (picked != null && picked != date) {
       setState(() {
@@ -73,7 +74,7 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Gider ekle"),
+          title: Text(Settings.addExpenseTransactionText),
         ),
         body: SafeArea(
             child: FutureBuilder<Map>(
@@ -118,7 +119,7 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                               child: TextFormField(
                                 controller: amount,
                                 decoration: InputDecoration(
-                                    hintText: "Örn: 20.23", border: InputBorder.none),
+                                    hintText: Settings.exmpBalanceHintText, border: InputBorder.none),
                                 style: TextStyle(fontSize: 24.0),
                                 keyboardType:
                                 TextInputType.numberWithOptions(decimal: true),
@@ -141,7 +142,7 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                               child: DropdownButton<String>(
                                 value: dropValue,
                                 hint: new Text(
-                                  'Select visitng purpose',
+                                  Settings.selectDateText,
                                   style: TextStyle(fontFamily: "Gotham"),
                                 ),
                                 items: expenseCategory.map((purposeTemp) {
@@ -164,7 +165,7 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                                   onPressed: () {
                                     handleAddExpenseCategory(context);
                                   },
-                                  child: Text("Gider kategorisi ekle"))),
+                                  child: Text(Settings.addExpenseCategoryText))),
                         ],
                       ),
                       SizedBox(height: 20.0),
@@ -185,7 +186,7 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                               child: TextField(
                                 controller: name,
                                 decoration: InputDecoration(
-                                    hintText: "İşlem Adı", border: InputBorder.none),
+                                    hintText: Settings.proccessNameHintText, border: InputBorder.none),
                                 style: TextStyle(fontSize: 24.0),
                                 maxLength: 24,
                               )),
@@ -231,22 +232,22 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                                   } catch (err) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBarUtil().snackBarSetup(
-                                            "Lütfen para miktarını doğru giriniz!",
-                                            "Tamam",
+                                            Settings.invalidMoneyText,
+                                            Settings.okButtonText,
                                                 () {},
                                             Colors.white));
                                   }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBarUtil().snackBarSetup(
-                                          "Boş alan bırakmayınız!",
-                                          "Tamam",
+                                          Settings.emptyFieldsText,
+                                          Settings.okButtonText,
                                               () {},
                                           Colors.white));
                                 }
                               },
                               child: Text(
-                                "Ekle",
+                                Settings.addButtonText,
                                 style: TextStyle(
                                     fontSize: 20.0, fontWeight: FontWeight.w600),
                               )))
@@ -257,11 +258,5 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                 }
               },
             )));
-  }
-
-  DropdownMenuItem getCategoryItem(snapshot) {
-    return snapshot.data!.forEach((key, value) {
-      return DropdownMenuItem(child: Text("sa"));
-    });
   }
 }

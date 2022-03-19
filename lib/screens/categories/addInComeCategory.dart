@@ -2,6 +2,7 @@ import 'package:benimhesabim/utils/moneyManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../utils/settings.dart';
 import '../../utils/snackBar.dart';
 
 class AddInComeCategory extends StatefulWidget {
@@ -23,17 +24,17 @@ class _AddInComeCategoryState extends State<AddInComeCategory> {
         MoneyManger.dbHelper.addInComeCategory(categoryName.text);
         Navigator.pop(context);
         return ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup(
-            "Kategori eklendi!", "Tamam", () {},
+            Settings.addedCategoryText, Settings.okButtonText, () {},
             Colors.white));
       }
       return ScaffoldMessenger.of(context).showSnackBar(
           SnackBarUtil().snackBarSetup(
-              "Eklemek istediğiniz kategori mevcut!", "Tamam", () {},
+              Settings.categoryIsExistText, Settings.okButtonText, () {},
               Colors.white));
     }
     return ScaffoldMessenger.of(context).showSnackBar(
         SnackBarUtil().snackBarSetup(
-            "Boş alan bırakmayınız!", "Tamam", () {},
+            Settings.emptyFieldsText, Settings.okButtonText, () {},
             Colors.white));
   }
 
@@ -41,7 +42,7 @@ class _AddInComeCategoryState extends State<AddInComeCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Gelir kategorisi ekle")),
+      appBar: AppBar(title: Text(Settings.addInComeCategoryText)),
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -51,12 +52,12 @@ class _AddInComeCategoryState extends State<AddInComeCategory> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextField(decoration: InputDecoration(hintText: "Kategori adı"),controller: categoryName),
+              TextField(decoration: InputDecoration(hintText: Settings.addCategoryHintText),controller: categoryName),
               SizedBox(height: 35),
               SizedBox(
                   child:ElevatedButton(
                       onPressed: (){handleAddInComeCategory(context);},
-                      child: Text("Ekle"))
+                      child: Text(Settings.addButtonText))
               ),
             ],
           ),

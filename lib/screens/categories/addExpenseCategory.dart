@@ -1,4 +1,5 @@
 import 'package:benimhesabim/utils/moneyManager.dart';
+import 'package:benimhesabim/utils/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,17 +24,17 @@ class _AddCategoryCategoryState extends State<AddExpenseCategory> {
         MoneyManger.dbHelper.addExpenseCategory(categoryName.text);
         Navigator.pop(context);
         return ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup(
-            "Kategori eklendi!", "Tamam", () {},
+            Settings.addedCategoryText, Settings.okButtonText, () {},
             Colors.white));
       }
       return ScaffoldMessenger.of(context).showSnackBar(
           SnackBarUtil().snackBarSetup(
-              "Eklemek istediğiniz kategori mevcut!", "Tamam", () {},
+              Settings.categoryIsExistText, Settings.okButtonText, () {},
               Colors.white));
     }
     return ScaffoldMessenger.of(context).showSnackBar(
         SnackBarUtil().snackBarSetup(
-            "Boş alan bırakmayınız!", "Tamam", () {},
+            Settings.emptyFieldsText, Settings.okButtonText, () {},
             Colors.white));
   }
 
@@ -41,7 +42,7 @@ class _AddCategoryCategoryState extends State<AddExpenseCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Gider kategorisi ekle")),
+      appBar: AppBar(title: Text(Settings.addExpenseCategoryText)),
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -51,12 +52,12 @@ class _AddCategoryCategoryState extends State<AddExpenseCategory> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextField(decoration: InputDecoration(hintText: "Kategori adı"),controller: categoryName),
+              TextField(decoration: InputDecoration(hintText: Settings.addCategoryHintText),controller: categoryName),
               SizedBox(height: 35),
               SizedBox(
                   child:ElevatedButton(
                       onPressed: (){handleAddInComeCategory(context);},
-                      child: Text("Ekle"))
+                      child: Text(Settings.addButtonText))
               ),
             ],
           ),

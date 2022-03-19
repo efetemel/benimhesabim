@@ -3,9 +3,9 @@ import 'package:benimhesabim/components/expenseTile.dart';
 import 'package:benimhesabim/components/inComeCart.dart';
 import 'package:benimhesabim/components/inComeTile.dart';
 import 'package:benimhesabim/screens/selectProcView.dart';
-import 'package:benimhesabim/screens/transactions/addTransactionInComeView.dart';
 import 'package:benimhesabim/screens/recentProcView.dart';
 import 'package:benimhesabim/utils/moneyManager.dart';
+import 'package:benimhesabim/utils/settings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -51,10 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(child: CircularProgressIndicator());
             if(snapshot.hasData){
               if(snapshot.data!.isEmpty){
-                return const Center(child: Text("Henüz işlem yok!"));
+                return  Center(child: Text(Settings.proccessNotFoundText));
               }
               MoneyManger.getTotalBalance(snapshot.data!);
-
               return ListView(
                 children: [
                   Padding(
@@ -66,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
 
                             const SizedBox(width: 8.0),
-                            Text("Hoşgeldin, ${widget.name}",
+                            Text("${Settings.welcomeText}, ${widget.name}",
                             style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w700,
@@ -93,8 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Column(
                         children: [
-                          const Text(
-                            "Toplam Bakiye",
+                          Text(
+                            Settings.totalBalanceText,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 22.0
@@ -122,19 +121,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                   ),
-
-
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
-                      "Son İşlemler",
+                      Settings.recentProccessText,
                       style: TextStyle(
                           fontSize: 32.0,
                           fontWeight: FontWeight.w900
                       ),
                     ),
                   ),
-
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -148,15 +144,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     },
                   ),
-
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
                     child:ElevatedButton(
                       onPressed: (){
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RecentProcView()));
                       },
-                      child: const Text("Daha Fazla Göster"),
+                      child:  Text(Settings.moreViewText),
                       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(secondaryColor)),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: const [
+                            SizedBox(width: 8.0),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
 
 
