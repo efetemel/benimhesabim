@@ -49,6 +49,18 @@ class DbHelper{
 
    }
 
+   Future addDefaultIncomeAndExpenseCategory() async{
+     var val = {
+       'name':"Genel",
+       'date':DateTime.now()
+     };
+     if(getInComeCategoryQ("Genel") == null && getExpenseCategoryQ("Genel") == null){
+       boxInCome.add(val);
+       boxExpense.add(val);
+     }
+    
+   }
+
    dynamic getInComeCategoryQ(String name){
      var exist = null;
      if(boxInCome.values.isEmpty){
