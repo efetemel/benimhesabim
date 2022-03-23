@@ -95,13 +95,45 @@ class _RecentProcViewState extends State<RecentProcView> {
                       ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: snapshot.data!.length,
+                        itemCount:
+                        snapshot.data!.length >= 5 ? 5 : snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          Map dataAtIndex = snapshot.data![index];
-                          if(dataAtIndex['type'] == "Gider")
-                            return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
-                          else
-                            return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
+                          Map dataAtIndex = snapshot.data!.values.toList()[index];
+                          return Dismissible(
+                            key: ValueKey<int>(snapshot.data!.length),
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.delete),
+                                      Text("Sil"),
+                                    ],
+                                  )),
+                            ),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (DismissDirection direction) {
+                              MoneyManger.dbHelper.dellData( dataAtIndex["date"]).whenComplete(() {
+                                setState(() {
+
+                                });
+                              });
+                            },
+                            child: dataAtIndex['type'] == "Gider"
+                                ? ExpenseTile(
+                                dataAtIndex["amount"],
+                                dataAtIndex["name"],
+                                dataAtIndex["date"],
+                                dataAtIndex["category"])
+                                : InComeTile(
+                                dataAtIndex["amount"],
+                                dataAtIndex["name"],
+                                dataAtIndex["date"],
+                                dataAtIndex["category"]),
+                          );
                         },
                       ),
                       Padding(

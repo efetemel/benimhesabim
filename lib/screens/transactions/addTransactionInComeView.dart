@@ -1,9 +1,8 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
+
 
 import 'package:benimhesabim/constants.dart';
 import 'package:benimhesabim/screens/categories/addInComeCategory.dart';
+import 'package:benimhesabim/screens/homeView.dart';
 import 'package:benimhesabim/utils/dbHelper.dart';
 import 'package:benimhesabim/utils/snackBar.dart';
 import 'package:flutter/material.dart';
@@ -226,7 +225,11 @@ class _AddTransactionState extends State<AddTransaction> {
                                 double _amount = double.parse(amount.text);
                                 await DbHelper()
                                     .addData(_amount, date, name.text, "Gelir",dropValue);
-                                Navigator.of(context).pop();
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => HomeScreen(widget.name)),
+                                      (Route<dynamic> route) => false,
+                                );
                               } catch (err) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBarUtil().snackBarSetup(

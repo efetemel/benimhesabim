@@ -17,6 +17,8 @@ class Settings{
   static String balanceProccessText_ = "Bakiye İşlemleri";
   static String addInComeCategoryText = "Gelir Kategorisi Ekle";
   static String addExpenseCategoryText = "Gider Kategorisi Ekle";
+  static String dellInComeTransactionText = "Gelir Sil";
+  static String dellExpenseTransactionText = "Gider Sil";
   static String addInComeTransactionText = "Gelir Ekle";
   static String addExpenseTransactionText = "Gider Ekle";
   static String addCategoryHintText = "Kategori adı";

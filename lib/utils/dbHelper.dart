@@ -23,7 +23,12 @@ class DbHelper{
        'type':type,
        'category':category
      };
-     box.add(value);
+     box.put(date.hour.toString()+"."+date.minute.toString()+"."+date.second.toString(),value);
+   }
+
+   Future dellData(DateTime time) async{
+     box.delete(time.hour.toString()+"."+time.minute.toString()+"."+time.second.toString());
+     //box.add(x);
    }
 
    Future<Map> fetch(){

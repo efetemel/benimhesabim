@@ -31,7 +31,6 @@ class TransactionProcView extends StatelessWidget {
             title: Text(Settings.addInComeTransactionText),
             onTap: () {handleAddInCome(context);},
           ),
-          const Divider(),
           ListTile(
             leading: Text(
               "₺ -",

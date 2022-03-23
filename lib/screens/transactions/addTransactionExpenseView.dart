@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
+
 
 import 'package:benimhesabim/constants.dart';
 import 'package:benimhesabim/screens/categories/addExpenseCategory.dart';
@@ -227,8 +225,11 @@ class _AddTransactionState extends State<AddTransactionExpenseView> {
                                     double _amount = double.parse(amount.text);
                                     await DbHelper()
                                         .addData(_amount, date, name.text, "Gider",dropValue);
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen(widget.name)));
-
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HomeScreen(widget.name)),
+                                          (Route<dynamic> route) => false,
+                                    );
                                   } catch (err) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBarUtil().snackBarSetup(

@@ -44,6 +44,7 @@ class InComeTile extends StatelessWidget {
             Text(months[time.month-1]),
           ],
         ),
+
         title: Text(name,style: TextStyle(fontWeight: FontWeight.w700),),
         subtitle: Text("Kategori: "+category,style: TextStyle(color: Colors.white),),
         trailing: Text("+"+value.toString()+" TL",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w700,color: Colors.green[500])),

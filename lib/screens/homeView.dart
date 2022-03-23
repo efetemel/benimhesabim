@@ -22,36 +22,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   MoneyManger moneyManger = MoneyManger();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  AddSelect(widget.name))).whenComplete(() {setState(() {
-
-          });});
-        },
-        backgroundColor: primaryColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0)
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (context) => AddSelect(widget.name)))
+                .whenComplete(() {
+              setState(() {});
+            });
+          },
+          backgroundColor: primaryColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+          child: const Icon(Icons.add, size: 32.0),
         ),
-        child: const Icon(Icons.add,size: 32.0),
-      ),
-      body: SafeArea(
-        child: FutureBuilder<Map>(
+        body: SafeArea(
+            child: FutureBuilder<Map>(
           future: MoneyManger.dbHelper.fetch(),
-          builder: (context,snapshot){
-            if(snapshot.connectionState == ConnectionState.waiting)
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
               return Center(child: CircularProgressIndicator());
-            if(snapshot.hasError)
+            if (snapshot.hasError)
               return Center(child: CircularProgressIndicator());
-            if(snapshot.hasData){
-              if(snapshot.data!.isEmpty){
-                return  Center(child: Text(Settings.proccessNotFoundText));
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return Center(child: Text(Settings.proccessNotFoundText));
               }
               MoneyManger.getTotalBalance(snapshot.data!);
               return ListView(
@@ -63,16 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-
                             const SizedBox(width: 8.0),
-                            Text("${Settings.welcomeText}, ${widget.name}",
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w700,
-                            ),)
+                            Text(
+                              "${Settings.welcomeText}, ${widget.name}",
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
                           ],
                         ),
-
                       ],
                     ),
                   ),
@@ -81,77 +82,108 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: const EdgeInsets.all(12.0),
                     child: Container(
                       decoration: const BoxDecoration(
-                        color: secondaryColor,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(24.0)
-                        )
-                      ),
+                          color: secondaryColor,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(24.0))),
                       padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 8.0
-                      ),
+                          vertical: 20.0, horizontal: 8.0),
                       child: Column(
                         children: [
                           Text(
                             Settings.totalBalanceText,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 22.0
-                            ),
+                            style: TextStyle(fontSize: 22.0),
                           ),
                           Text(
-                            MoneyManger.totalBalanceStr(MoneyManger.totalBalance),
+                            MoneyManger.totalBalanceStr(
+                                MoneyManger.totalBalance),
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                fontSize: 22.0,
-                              fontWeight: FontWeight.w700
-                            ),
+                                fontSize: 22.0, fontWeight: FontWeight.w700),
                           ),
-                          const SizedBox(height: 12,),
-                          Padding(padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InComeCart(MoneyManger.getInComeTotalMount(snapshot.data!)),
-                              ExpenseCart(MoneyManger.getExpenseTotalMount(snapshot.data!))
-                            ],
-                          ),)
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InComeCart(MoneyManger.getInComeTotalMount(
+                                    snapshot.data!)),
+                                ExpenseCart(MoneyManger.getExpenseTotalMount(
+                                    snapshot.data!))
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
-
                   ),
                   Padding(
                     padding: EdgeInsets.all(12.0),
                     child: Text(
                       Settings.recentProccessText,
                       style: TextStyle(
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.w900
-                      ),
+                          fontSize: 32.0, fontWeight: FontWeight.w900),
                     ),
                   ),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data!.length >= 5  ? 5 : snapshot.data!.length,
-                    itemBuilder: (context,index){
-                      Map dataAtIndex = snapshot.data![index];
-                      if(dataAtIndex['type'] == "Gider")
-                        return ExpenseTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
-                      else
-                        return InComeTile(dataAtIndex["amount"],dataAtIndex["name"],dataAtIndex["date"],dataAtIndex["category"]);
+                    itemCount:
+                        snapshot.data!.length >= 5 ? 5 : snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      Map dataAtIndex = snapshot.data!.values.toList()[index];
+                      return Dismissible(
+                        key: ValueKey<int>(snapshot.data!.length),
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.delete),
+                                  Text("Sil"),
+                                ],
+                              )),
+                        ),
+                        direction: DismissDirection.endToStart,
+                        onDismissed: (DismissDirection direction) {
+                          MoneyManger.dbHelper.dellData( dataAtIndex["date"]).whenComplete(() {
+                            setState(() {
 
+                            });
+                          });
+                        },
+                        child: dataAtIndex['type'] == "Gider"
+                            ? ExpenseTile(
+                                dataAtIndex["amount"],
+                                dataAtIndex["name"],
+                                dataAtIndex["date"],
+                                dataAtIndex["category"])
+                            : InComeTile(
+                                dataAtIndex["amount"],
+                                dataAtIndex["name"],
+                                dataAtIndex["date"],
+                                dataAtIndex["category"]),
+                      );
                     },
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child:ElevatedButton(
-                      onPressed: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RecentProcView()));
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const RecentProcView()));
                       },
-                      child:  Text(Settings.moreViewText),
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(secondaryColor)),),
+                      child: Text(Settings.moreViewText),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(secondaryColor)),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -160,26 +192,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: const [
-                            SizedBox(width: 8.0,height: 55,),
+                            SizedBox(
+                              width: 8.0,
+                              height: 55,
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
-
-
-
                 ],
               );
-            }
-            else{
+            } else {
               return const Center(child: CircularProgressIndicator());
             }
           },
-        )
-      )
-    );
+        )));
   }
-
 }
-
