@@ -21,14 +21,22 @@ class _AddCategoryCategoryState extends State<AddExpenseCategory> {
     if(categoryName.text.isNotEmpty && categoryName.text.length >= 2){
       var category = MoneyManger.dbHelper.getExpenseCategoryQ(categoryName.text);
       if(category == null){
-        MoneyManger.dbHelper.addExpenseCategory(categoryName.text);
-        setState(() {
+        var res = MoneyManger.dbHelper.addExpenseCategory(categoryName.text);
+        if(res != false){
+          setState(() {
 
-        });
-        Navigator.pop(context);
-        return ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup(
-            Settings.addedCategoryText, Settings.okButtonText, () {},
-            Colors.white));
+          });
+          Navigator.pop(context);
+          return ScaffoldMessenger.of(context).showSnackBar(SnackBarUtil().snackBarSetup(
+              Settings.addedCategoryText, Settings.okButtonText, () {},
+              Colors.white));
+        }
+        else{
+          return ScaffoldMessenger.of(context).showSnackBar(
+              SnackBarUtil().snackBarSetup(
+                  Settings.categoryIsExistText, Settings.okButtonText, () {},
+                  Colors.white));
+        }
       }
       return ScaffoldMessenger.of(context).showSnackBar(
           SnackBarUtil().snackBarSetup(

@@ -45,8 +45,26 @@ class DbHelper{
        'name':name,
        'date':DateTime.now()
      };
-     boxInCome.add(val);
+     if(getInComeCategoryQ(name) == null) {
+       boxInCome.add(val);
+     }
+     else {
+       return false;
+     }
 
+   }
+
+   Future addExpenseCategory(String name) async{
+     var val = {
+       'name':name,
+       'date':DateTime.now()
+     };
+     if(getExpenseCategoryQ(name) == null) {
+       boxExpense.add(val);
+     }
+     else {
+       return false;
+     }
    }
 
    Future addDefaultIncomeAndExpenseCategory() async{
@@ -58,7 +76,7 @@ class DbHelper{
        boxInCome.add(val);
        boxExpense.add(val);
      }
-    
+
    }
 
    dynamic getInComeCategoryQ(String name){
@@ -104,14 +122,6 @@ class DbHelper{
      else{
        return Future.value(boxInCome.toMap());
      }
-   }
-
-   Future addExpenseCategory(String name) async{
-     var val = {
-       'name':name,
-       'date':DateTime.now()
-     };
-     boxExpense.add(val);
    }
 
    Future<Map> getExpenseCategory(){
