@@ -8,8 +8,6 @@ import 'package:benimhesabim/utils/moneyManager.dart';
 import 'package:benimhesabim/utils/settings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +20,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  MoneyManger moneyManger = MoneyManger();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  int touchedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Center(child: Text(Settings.proccessNotFoundText));
               }
               MoneyManger.getTotalBalance(snapshot.data!);
-              return ListView(
+              return Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
@@ -84,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const BoxDecoration(
                           color: secondaryColor,
                           borderRadius:
-                              BorderRadius.all(Radius.circular(24.0))),
+                          BorderRadius.all(Radius.circular(24.0))),
                       padding: const EdgeInsets.symmetric(
                           vertical: 20.0, horizontal: 8.0),
                       child: Column(
@@ -115,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     snapshot.data!))
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -132,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount:
-                        snapshot.data!.length >= 5 ? 5 : snapshot.data!.length,
+                    snapshot.data!.length >= 5 ? 5 : snapshot.data!.length,
                     itemBuilder: (context, index) {
                       Map dataAtIndex = snapshot.data!.values.toList()[index];
                       return Dismissible(
@@ -160,15 +164,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         child: dataAtIndex['type'] == "Gider"
                             ? ExpenseTile(
-                                dataAtIndex["amount"],
-                                dataAtIndex["name"],
-                                dataAtIndex["date"],
-                                dataAtIndex["category"])
+                            dataAtIndex["amount"],
+                            dataAtIndex["name"],
+                            dataAtIndex["date"],
+                            dataAtIndex["category"])
                             : InComeTile(
-                                dataAtIndex["amount"],
-                                dataAtIndex["name"],
-                                dataAtIndex["date"],
-                                dataAtIndex["category"]),
+                            dataAtIndex["amount"],
+                            dataAtIndex["name"],
+                            dataAtIndex["date"],
+                            dataAtIndex["category"]),
                       );
                     },
                   ),
@@ -182,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Text(Settings.moreViewText),
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(secondaryColor)),
+                          MaterialStateProperty.all(secondaryColor)),
                     ),
                   ),
                   Padding(
@@ -209,4 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         )));
   }
+
 }
+
+
+
